@@ -9,7 +9,7 @@ export const UserSchema = z.object({
   updateTime: z.string().default(() => new Date().toISOString()),
 });
 
-export enum RestDayModeEnum {
+export enum ResetDayModeEnum {
   DAN = 25.8,
   SHUANG = 21.5,
   DAXIAO = 23.65,
@@ -20,7 +20,7 @@ export const CurrentJobSchema = z.object({
   startTime: z.string().default('9:00'),
   endTime: z.string().default('18:00'),
   salary: z.number().default(12000),
-  resetDayMode: z.nativeEnum(RestDayModeEnum).default(RestDayModeEnum.SHUANG),
+  resetDayMode: z.nativeEnum(ResetDayModeEnum).default(ResetDayModeEnum.SHUANG),
 });
 
 export type User = z.infer<typeof UserSchema>;

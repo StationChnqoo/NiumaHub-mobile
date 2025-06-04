@@ -1,13 +1,30 @@
 import {RouteProp} from '@react-navigation/native';
+import Flex from '@src/components/Flex';
+import ToolBar from '@src/components/ToolBar';
+import c from '@src/constants/c';
 import {useCaches} from '@src/constants/stores';
 import {useInterval} from 'ahooks';
 import dayjs from 'dayjs';
 import React, {useEffect, useMemo, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
-import Flex from '@src/components/Flex';
-import {fonts} from '@src/constants/c';
+import MoreButton from '@src/components/MoreButton';
+import {ResetDayModeEnum} from '@src/constants/t';
+import {produce} from 'immer';
+
+const ResetDayOptions = [
+  {label: '单休', value: ResetDayModeEnum.DAN},
+  {label: '双休', value: ResetDayModeEnum.SHUANG},
+  {label: '大小周', value: ResetDayModeEnum.DAXIAO},
+];
 
 interface MyProps {
   navigation?: RootStacksProp;
@@ -16,7 +33,7 @@ interface MyProps {
 
 const WorkTimeConfig: React.FC<MyProps> = props => {
   const {navigation, route} = props;
-  const {bears, increase, currentJob} = useCaches();
+  const {bears, increase, currentJob, setCurrentJob} = useCaches();
   const [interval, setInterval] = React.useState<undefined | null | number>(
     undefined,
   );
@@ -71,26 +88,106 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
   }, []);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
+      <ToolBar
+        title={'牛马计算器'}
+        onBackPress={() => {
+          navigation.goBack();
+        }}
+      />
       <ScrollView>
         <View style={styles.view}>
-          <Flex horizontal justify={'space-between'}>
-            <Text style={{color: '#666', fontSize: 14}}>今日收入</Text>
-            <Text
-              style={{
-                fontFamily: fonts.Digital7,
-                color: '#333',
-                fontSize: 24,
-              }}>
-              {income.toFixed(2)}
+          <View style={{height: 12}} />
+          <View style={styles.previewCell}>
+            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>
+              预览
             </Text>
-          </Flex>
-          <Text style={{color: '#666', fontSize: 14}}>
-            距离下班：{countdown}
-          </Text>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>今日收入</Text>
+              <Text
+                style={{
+                  color: c.colors.red,
+                  fontSize: 16,
+                }}>
+                {income.toFixed(2)}
+              </Text>
+            </Flex>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>距离下班</Text>
+              <Text
+                style={{
+                  color: c.colors.red,
+                  fontSize: 16,
+                }}>
+                {countdown}
+              </Text>
+            </Flex>
+          </View>
+          <View style={{height: 12}} />
+          <View style={styles.previewCell}>
+            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>
+              设置
+            </Text>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>税前收入/月</Text>
+              <MoreButton label={`${currentJob.salary}`} onPress={() => {}} />
+            </Flex>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>上班时间</Text>
+              <MoreButton
+                label={`${currentJob.startTime}`}
+                onPress={() => {}}
+              />
+            </Flex>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>下班时间</Text>
+              <MoreButton label={`${currentJob.endTime}`} onPress={() => {}} />
+            </Flex>
+            <View style={{height: 12}} />
+            <Flex horizontal justify={'space-between'}>
+              <Text style={{color: '#666', fontSize: 14}}>休息方式</Text>
+              <Flex horizontal style={{gap: 12}}>
+                {ResetDayOptions.map((it, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      setCurrentJob(
+                        produce(currentJob, draft => {
+                          draft.resetDayMode = it.value;
+                        }),
+                      );
+                    }}
+                    style={[
+                      styles.tag,
+                      it.value == currentJob.resetDayMode
+                        ? {borderColor: '#987123'}
+                        : {borderColor: '#999'},
+                    ]}>
+                    <Text
+                      style={[
+                        {fontSize: 14},
+                        it.value == currentJob.resetDayMode
+                          ? {color: '#987123'}
+                          : {color: '#999'},
+                      ]}>
+                      {it.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </Flex>
+            </Flex>
+          </View>
         </View>
       </ScrollView>
-      <View style={{height: useSafeAreaInsets().bottom}} />
+      <View
+        style={{height: useSafeAreaInsets().bottom, backgroundColor: '#fff'}}
+      />
     </View>
   );
 };
@@ -98,10 +195,23 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: 'white',
     position: 'relative',
     justifyContent: 'center',
-    paddingHorizontal: '5%',
+    paddingHorizontal: 12,
+  },
+  previewCell: {
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  tag: {
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
   },
 });
 
