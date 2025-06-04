@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
@@ -12,6 +5,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -23,6 +17,13 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {RootStacksParams, RootStacksProp} from './src/screens';
+import {RouteProp} from '@react-navigation/native';
+
+interface MyProps {
+  navigation?: RootStacksProp;
+  route?: RouteProp<RootStacksParams, 'HelloWorld'>;
+}
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -54,22 +55,13 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
-function App(): React.JSX.Element {
+const App: React.FC<MyProps> = props => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {navigation} = props;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the recommendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
   const safePadding = '5%';
 
   return (
@@ -78,10 +70,9 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        style={backgroundStyle}>
+      <ScrollView style={backgroundStyle}>
         <View style={{paddingRight: safePadding}}>
-          <Header/>
+          <Header />
         </View>
         <View
           style={{
@@ -89,6 +80,14 @@ function App(): React.JSX.Element {
             paddingHorizontal: safePadding,
             paddingBottom: safePadding,
           }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('HelloWorld', {
+                id: new Date().toISOString(),
+              });
+            }}>
+            <Text>Go next</Text>
+          </TouchableOpacity>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
@@ -107,7 +106,7 @@ function App(): React.JSX.Element {
       </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   sectionContainer: {
