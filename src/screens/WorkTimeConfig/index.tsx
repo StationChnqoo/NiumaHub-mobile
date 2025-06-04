@@ -3,9 +3,11 @@ import {useCaches} from '@src/constants/stores';
 import {useInterval} from 'ahooks';
 import dayjs from 'dayjs';
 import React, {useEffect, useMemo, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
+import Flex from '@src/components/Flex';
+import {fonts} from '@src/constants/c';
 
 interface MyProps {
   navigation?: RootStacksProp;
@@ -70,10 +72,24 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.view}>
-        <Text>今日收入{income.toFixed(2)}</Text>
-        <Text>距离下班：{countdown}</Text>
-      </View>
+      <ScrollView>
+        <View style={styles.view}>
+          <Flex horizontal justify={'space-between'}>
+            <Text style={{color: '#666', fontSize: 14}}>今日收入</Text>
+            <Text
+              style={{
+                fontFamily: fonts.Digital7,
+                color: '#333',
+                fontSize: 24,
+              }}>
+              {income.toFixed(2)}
+            </Text>
+          </Flex>
+          <Text style={{color: '#666', fontSize: 14}}>
+            距离下班：{countdown}
+          </Text>
+        </View>
+      </ScrollView>
       <View style={{height: useSafeAreaInsets().bottom}} />
     </View>
   );
@@ -85,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'relative',
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: '5%',
   },
 });
 
