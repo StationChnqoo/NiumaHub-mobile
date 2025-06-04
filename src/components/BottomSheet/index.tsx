@@ -1,6 +1,13 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface MyProps {
   children: React.ReactNode;
@@ -11,7 +18,22 @@ interface MyProps {
 }
 
 const BottomSheet: React.FC<MyProps> = props => {
+  const insets = useSafeAreaInsets();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const {children, show, onClose, onHide, onShow} = props;
+  
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardWillShow', () =>
+      setKeyboardVisible(true),
+    );
+    const hideSub = Keyboard.addListener('keyboardWillHide', () =>
+      setKeyboardVisible(false),
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   return (
     <Modal
@@ -29,8 +51,18 @@ const BottomSheet: React.FC<MyProps> = props => {
       statusBarTranslucent={false}
       backdropOpacity={0.58}
       style={{margin: 0, padding: 0, justifyContent: 'flex-end'}}>
-      {children}
-      {/* <View style={{height: useSafeAreaInsets().bottom}} /> */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{flex: 1, justifyContent: 'flex-end'}} // 例如底部弹窗
+      >
+        {children}
+        <View
+          style={{
+            height: keyboardVisible ? 0 : insets.bottom,
+            backgroundColor: '#fff',
+          }}
+        />
+      </KeyboardAvoidingView>
     </Modal>
   );
 };

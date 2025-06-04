@@ -1,6 +1,16 @@
 import BottomSheet from '@src/components/BottomSheet';
-import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import Flex from '@src/components/Flex';
+import c from '@src/constants/c';
+import React, {useEffect, useState} from 'react';
+import {
+  Button,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface MyProps {
@@ -19,9 +29,21 @@ const InputModal: React.FC<MyProps> = props => {
         </Text>
         <View style={{height: 12}} />
         <TextInput style={styles.input} />
-        <View
-          style={{height: useSafeAreaInsets().bottom, backgroundColor: '#fff'}}
-        />
+        <View style={{height: 24}} />
+        <Flex justify={'flex-end'} style={{gap: 16}} horizontal>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={onClose}
+            style={[c.styles.button, c.styles.buttonBordered]}>
+            <Text style={{color: '#987123', fontSize: 14}}>取消</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={onClose}
+            style={[c.styles.button, c.styles.buttonFilled]}>
+            <Text style={{color: '#fff', fontSize: 14}}>确认</Text>
+          </TouchableOpacity>
+        </Flex>
       </View>
     </BottomSheet>
   );
@@ -29,10 +51,10 @@ const InputModal: React.FC<MyProps> = props => {
 
 const styles = StyleSheet.create({
   view: {
-    padding: 16,
+    padding: 24,
     backgroundColor: '#fff',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
   },
   input: {
     fontSize: 16,

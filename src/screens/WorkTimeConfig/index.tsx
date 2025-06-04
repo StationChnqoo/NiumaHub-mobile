@@ -1,24 +1,23 @@
 import {RouteProp} from '@react-navigation/native';
 import Flex from '@src/components/Flex';
+import MoreButton from '@src/components/MoreButton';
 import ToolBar from '@src/components/ToolBar';
 import c from '@src/constants/c';
 import {useCaches} from '@src/constants/stores';
+import {ResetDayModeEnum} from '@src/constants/t';
 import {useInterval} from 'ahooks';
 import dayjs from 'dayjs';
+import {produce} from 'immer';
 import React, {useEffect, useMemo, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
-import MoreButton from '@src/components/MoreButton';
-import {ResetDayModeEnum} from '@src/constants/t';
-import {produce} from 'immer';
 import InputModal from './components/InputModal';
 
 const ResetDayOptions = [
@@ -53,8 +52,12 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
     end: dayjs.Dayjs,
     salary: number,
   ) => {
-    if (now.isBefore(start)) return {income: 0, countdown: ''};
-    if (now.isAfter(end)) return {income: 0, countdown: ''};
+    if (now.isBefore(start)) return {income: 0, countdown: '还没上班哦😴'};
+    if (now.isAfter(end))
+      return {
+        income: salary / currentJob.resetDayMode,
+        countdown: '已经下班啦😄',
+      };
 
     const secondsWorked = now.diff(start, 'second');
     const totalSeconds = end.diff(start, 'second');
@@ -147,13 +150,20 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
               <Text style={{color: '#666', fontSize: 14}}>上班时间</Text>
               <MoreButton
                 label={`${currentJob.startTime}`}
-                onPress={() => {}}
+                onPress={() => {
+                  setIsShowInputModal(true);
+                }}
               />
             </Flex>
             <View style={{height: 12}} />
             <Flex horizontal justify={'space-between'}>
               <Text style={{color: '#666', fontSize: 14}}>下班时间</Text>
-              <MoreButton label={`${currentJob.endTime}`} onPress={() => {}} />
+              <MoreButton
+                label={`${currentJob.endTime}`}
+                onPress={() => {
+                  setIsShowInputModal(true);
+                }}
+              />
             </Flex>
             <View style={{height: 12}} />
             <Flex horizontal justify={'space-between'}>
@@ -219,7 +229,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   tag: {
-    paddingVertical: 6,
+    paddingVertical: 4,
     paddingHorizontal: 6,
     justifyContent: 'center',
     alignItems: 'center',

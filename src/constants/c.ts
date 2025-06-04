@@ -23,6 +23,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  button: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonBordered: {
+    backgroundColor: '#f0f0f0',
+    borderColor: '#ddd',
+  },
+  buttonFilled: {
+    backgroundColor: '#987123',
+  },
 });
 
 const colors = {
