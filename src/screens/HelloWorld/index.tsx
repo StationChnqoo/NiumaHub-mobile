@@ -3,6 +3,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
+import {useCaches} from '@src/constants/stores';
 
 interface MyProps {
   navigation?: RootStacksProp;
@@ -11,7 +12,7 @@ interface MyProps {
 
 const HelloWorld: React.FC<MyProps> = props => {
   const {navigation, route} = props;
-
+  const {bears, increase} = useCaches();
   // const network = useNetwork();
   // useFocusEffect(useCallback(() => {}, [sound]));
 
@@ -24,10 +25,12 @@ const HelloWorld: React.FC<MyProps> = props => {
           }}>
           <Text>{route?.params.id}</Text>
           <Text>Go back</Text>
-          <Image
-            source={require('@src/assets/images/ic_launcher.png')}
-            style={{height: 36, width: 36}}
-          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            increase(1);
+          }}>
+          <Text>Bears: {bears}</Text>
         </TouchableOpacity>
       </View>
       <View style={{height: useSafeAreaInsets().bottom}} />
