@@ -19,6 +19,7 @@ import {RootStacksParams, RootStacksProp} from '..';
 import MoreButton from '@src/components/MoreButton';
 import {ResetDayModeEnum} from '@src/constants/t';
 import {produce} from 'immer';
+import InputModal from './components/InputModal';
 
 const ResetDayOptions = [
   {label: '单休', value: ResetDayModeEnum.DAN},
@@ -38,8 +39,9 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
     undefined,
   );
   const [s, setS] = useState(0);
+  const [isShowInputModal, setIsShowInputModal] = useState(false);
 
-  // const network = useNetwork();
+  // const nework = useNetwork();
   // useFocusEffect(useCallback(() => {}, [sound]));
   useInterval(() => {
     setS(t => t + 1);
@@ -133,7 +135,12 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
             <View style={{height: 12}} />
             <Flex horizontal justify={'space-between'}>
               <Text style={{color: '#666', fontSize: 14}}>税前收入/月</Text>
-              <MoreButton label={`${currentJob.salary}`} onPress={() => {}} />
+              <MoreButton
+                label={`${currentJob.salary}`}
+                onPress={() => {
+                  setIsShowInputModal(true);
+                }}
+              />
             </Flex>
             <View style={{height: 12}} />
             <Flex horizontal justify={'space-between'}>
@@ -187,6 +194,12 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
       </ScrollView>
       <View
         style={{height: useSafeAreaInsets().bottom, backgroundColor: '#fff'}}
+      />
+      <InputModal
+        show={isShowInputModal}
+        onClose={() => {
+          setIsShowInputModal(false);
+        }}
       />
     </View>
   );
