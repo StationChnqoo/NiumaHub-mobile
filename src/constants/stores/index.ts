@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {createJSONStorage, devtools, persist} from 'zustand/middleware';
-import {User, UserSchema} from '../t';
+import {CurrentJob, CurrentJobSchema, User, UserSchema} from '../t';
 
 import {MMKV} from 'react-native-mmkv';
 import {StateStorage} from 'zustand/middleware';
@@ -21,11 +21,14 @@ interface States {
   setUser: (user: User) => void;
   bears: number;
   increase: (by: number) => void;
+  currentJob: CurrentJob;
+  setCurrentJob: (cj: CurrentJob) => void;
 }
 
 const initialState = {
   bears: 0,
   user: UserSchema.parse({}),
+  currentJob: CurrentJobSchema.parse({}),
 };
 
 const useCaches = create<States>()(
@@ -35,6 +38,7 @@ const useCaches = create<States>()(
         ...initialState,
         increase: by => set(state => ({bears: state.bears + by})),
         setUser: user => set({user}),
+        setCurrentJob: currentJob => set({currentJob}),
       }),
       {
         storage: createJSONStorage(() => mmkvStorage),
@@ -43,6 +47,7 @@ const useCaches = create<States>()(
         partialize: state => ({
           bears: state.bears,
           user: state.user,
+          currentJob: state.currentJob,
         }),
       },
     ),

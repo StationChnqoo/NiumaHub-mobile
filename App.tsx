@@ -88,6 +88,14 @@ const App: React.FC<MyProps> = props => {
             }}>
             <Text>Go next</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('WorkTimeConfig', {
+                id: new Date().toISOString(),
+              });
+            }}>
+            <Text>WorkTime Config</Text>
+          </TouchableOpacity>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.

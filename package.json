@@ -13,6 +13,8 @@
     "@react-navigation/native": "^7.1.10",
     "@react-navigation/native-stack": "^7.3.14",
     "@react-navigation/stack": "^7.3.3",
+    "ahooks": "^3.8.5",
+    "dayjs": "^1.11.13",
     "immer": "^10.1.1",
     "react": "19.0.0",
     "react-native": "0.79.2",
