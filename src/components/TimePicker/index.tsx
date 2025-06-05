@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
 import WheelView from '../WheelView';
@@ -10,11 +10,15 @@ interface MyProps {
   onClose: () => void;
   onShow?: () => void;
   onHide?: () => void;
+  onConfirm: (time: {HH: String; mm: String}) => void;
 }
 
+const padZero = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+
 const TimePicker: React.FC<MyProps> = props => {
-  const {show, onClose, onHide, onShow} = props;
-  const padZero = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+  const {show, onClose, onHide, onShow, onConfirm} = props;
+  const [HH, setHH] = useState('0');
+  const [mm, setMm] = useState('0');
 
   return (
     <Modal
@@ -39,11 +43,17 @@ const TimePicker: React.FC<MyProps> = props => {
         <View style={{height: 24}} />
         <Flex horizontal justify="center">
           <View style={{width: '25%'}}>
-            <WheelView data={Array.from({length: 24}, (_, i) => padZero(i))} />
+            <WheelView
+              data={Array.from({length: 24}, (_, i) => `${padZero(i)}`)}
+              onScrollEnd={setHH}
+            />
           </View>
           <View style={{width: '10%'}} />
           <View style={{width: '25%'}}>
-            <WheelView data={Array.from({length: 60}, (_, i) => padZero(i))} />
+            <WheelView
+              data={Array.from({length: 60}, (_, i) => `${padZero(i)}`)}
+              onScrollEnd={setMm}
+            />
           </View>
         </Flex>
         <View style={{height: 24}} />
@@ -56,7 +66,9 @@ const TimePicker: React.FC<MyProps> = props => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={onClose}
+            onPress={() => {
+              onConfirm({HH, mm});
+            }}
             style={[c.styles.button, c.styles.buttonFilled]}>
             <Text style={{color: '#fff', fontSize: 14}}>确认</Text>
           </TouchableOpacity>
@@ -68,7 +80,7 @@ const TimePicker: React.FC<MyProps> = props => {
 
 const styles = StyleSheet.create({
   view: {
-    borderRadius: 24,
+    borderRadius: 16,
     justifyContent: 'center',
     padding: 24,
     backgroundColor: 'white',

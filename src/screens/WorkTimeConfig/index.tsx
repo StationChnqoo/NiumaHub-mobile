@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native';
 import Flex from '@src/components/Flex';
 import MoreButton from '@src/components/MoreButton';
+import TimePicker from '@src/components/TimePicker';
 import ToolBar from '@src/components/ToolBar';
 import c from '@src/constants/c';
 import {useCaches} from '@src/constants/stores';
@@ -19,7 +20,6 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
 import InputModal from './components/InputModal';
-import TimePicker from '@src/components/TimePicker';
 
 const ResetDayOptions = [
   {label: '单休', value: ResetDayModeEnum.DAN},
@@ -41,6 +41,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
   const [s, setS] = useState(0);
   const [isShowInputModal, setIsShowInputModal] = useState(false);
   const [isShowTimePicker, setIsShowTimePicker] = useState(false);
+  const [timeIntent, setTimeIntent] = useState('startTime');
 
   // const nework = useNetwork();
   // useFocusEffect(useCallback(() => {}, [sound]));
@@ -88,6 +89,14 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
     const end = dayjs(`${today} ${currentJob.endTime}`);
     return todayWorkedStatus(now, start, end, currentJob.salary);
   }, [currentJob, s]);
+
+  const updateCurrentJob = (key: any, value: any) => {
+    setCurrentJob(
+      produce(currentJob, draft => {
+        draft[key] = value;
+      }),
+    );
+  };
 
   useEffect(() => {
     setInterval(1000);
@@ -153,6 +162,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
               <MoreButton
                 label={`${currentJob.startTime}`}
                 onPress={() => {
+                  setTimeIntent('startTime');
                   setIsShowTimePicker(true);
                 }}
               />
@@ -163,6 +173,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
               <MoreButton
                 label={`${currentJob.endTime}`}
                 onPress={() => {
+                  setTimeIntent('endTime');
                   setIsShowTimePicker(true);
                 }}
               />
@@ -212,10 +223,18 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
         onClose={() => {
           setIsShowInputModal(false);
         }}
+        onConfirm={s => {
+          updateCurrentJob('salary', Number(s));
+          setIsShowInputModal(false);
+        }}
       />
       <TimePicker
         show={isShowTimePicker}
         onClose={() => {
+          setIsShowTimePicker(false);
+        }}
+        onConfirm={time => {
+          updateCurrentJob(timeIntent, `${time.HH}:${time.mm}`);
           setIsShowTimePicker(false);
         }}
       />

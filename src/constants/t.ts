@@ -17,7 +17,7 @@ export enum ResetDayModeEnum {
 
 export const CurrentJobSchema = z.object({
   id: z.string().default(''),
-  startTime: z.string().default('9:00'),
+  startTime: z.string().default('09:00'),
   endTime: z.string().default('18:00'),
   salary: z.number().default(12000),
   resetDayMode: z.nativeEnum(ResetDayModeEnum).default(ResetDayModeEnum.SHUANG),
