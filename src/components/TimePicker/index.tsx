@@ -31,8 +31,8 @@ const TimePicker: React.FC<MyProps> = props => {
       onBackdropPress={onClose}
       onModalShow={onShow}
       onModalHide={onHide}
-      useNativeDriver={true}
-      hideModalContentWhileAnimating={false}
+      useNativeDriver={false}
+      hideModalContentWhileAnimating={true}
       statusBarTranslucent={false}
       backdropOpacity={0.58}
       style={{margin: 0, padding: 0, justifyContent: 'center'}}>
@@ -41,7 +41,7 @@ const TimePicker: React.FC<MyProps> = props => {
           请选择时间
         </Text>
         <View style={{height: 24}} />
-        <Flex horizontal justify="center">
+        <Flex horizontal justify='space-between'>
           <View style={{width: '25%'}}>
             <WheelView
               data={Array.from({length: 24}, (_, i) => `${padZero(i)}`)}
@@ -57,7 +57,7 @@ const TimePicker: React.FC<MyProps> = props => {
           </View>
         </Flex>
         <View style={{height: 24}} />
-        <Flex justify={'center'} style={{gap: 16}} horizontal>
+        <Flex justify={'flex-end'} style={{gap: 16}} horizontal>
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={onClose}

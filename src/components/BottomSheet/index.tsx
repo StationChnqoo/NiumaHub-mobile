@@ -46,8 +46,8 @@ const BottomSheet: React.FC<MyProps> = props => {
       onBackdropPress={onClose}
       onModalShow={onShow}
       onModalHide={onHide}
-      useNativeDriver={true}
-      hideModalContentWhileAnimating={false}
+      useNativeDriver={false}
+      hideModalContentWhileAnimating={true}
       statusBarTranslucent={false}
       backdropOpacity={0.58}
       style={{margin: 0, padding: 0, justifyContent: 'flex-end'}}>
