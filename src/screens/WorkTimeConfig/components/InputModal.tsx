@@ -1,17 +1,14 @@
 import BottomSheet from '@src/components/BottomSheet';
 import Flex from '@src/components/Flex';
 import c from '@src/constants/c';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
-  Button,
-  Keyboard,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface MyProps {
   show?: boolean;

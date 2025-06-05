@@ -19,6 +19,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RootStacksParams, RootStacksProp} from '..';
 import InputModal from './components/InputModal';
+import TimePicker from '@src/components/TimePicker';
 
 const ResetDayOptions = [
   {label: '单休', value: ResetDayModeEnum.DAN},
@@ -39,6 +40,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
   );
   const [s, setS] = useState(0);
   const [isShowInputModal, setIsShowInputModal] = useState(false);
+  const [isShowTimePicker, setIsShowTimePicker] = useState(false);
 
   // const nework = useNetwork();
   // useFocusEffect(useCallback(() => {}, [sound]));
@@ -151,7 +153,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
               <MoreButton
                 label={`${currentJob.startTime}`}
                 onPress={() => {
-                  setIsShowInputModal(true);
+                  setIsShowTimePicker(true);
                 }}
               />
             </Flex>
@@ -161,7 +163,7 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
               <MoreButton
                 label={`${currentJob.endTime}`}
                 onPress={() => {
-                  setIsShowInputModal(true);
+                  setIsShowTimePicker(true);
                 }}
               />
             </Flex>
@@ -209,6 +211,12 @@ const WorkTimeConfig: React.FC<MyProps> = props => {
         show={isShowInputModal}
         onClose={() => {
           setIsShowInputModal(false);
+        }}
+      />
+      <TimePicker
+        show={isShowTimePicker}
+        onClose={() => {
+          setIsShowTimePicker(false);
         }}
       />
     </View>
