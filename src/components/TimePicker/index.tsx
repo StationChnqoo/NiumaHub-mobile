@@ -25,16 +25,20 @@ const TimePicker: React.FC<MyProps> = props => {
       animationIn={'fadeIn'}
       animationOut={'fadeOut'}
       propagateSwipe={true} // 允许手势传递
-      animationInTiming={618}
-      animationOutTiming={618}
+      animationInTiming={1000}
+      animationOutTiming={361}
       isVisible={show}
       onBackdropPress={onClose}
       onModalShow={onShow}
       onModalHide={onHide}
-      useNativeDriver={false}
+      useNativeDriver={true}
       hideModalContentWhileAnimating={true}
       statusBarTranslucent={false}
       backdropOpacity={0.58}
+      // 有效解决弹窗退出的时候闪烁
+      backdropTransitionOutTiming={1}
+      backdropTransitionInTiming={1}
+      renderToHardwareTextureAndroid={true}
       style={{margin: 0, padding: 0, justifyContent: 'center'}}>
       <View style={styles.view}>
         <Text style={{color: '#333', fontSize: 16, fontWeight: '500'}}>

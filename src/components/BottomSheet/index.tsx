@@ -40,16 +40,20 @@ const BottomSheet: React.FC<MyProps> = props => {
       animationIn={'fadeInUp'}
       animationOut={'fadeOutDown'}
       propagateSwipe={true} // 允许手势传递
-      // animationInTiming={618}
-      // animationOutTiming={618 * 2}
+      animationInTiming={618}
+      animationOutTiming={361}
       isVisible={show}
       onBackdropPress={onClose}
       onModalShow={onShow}
       onModalHide={onHide}
-      useNativeDriver={false}
-      hideModalContentWhileAnimating={true}
+      useNativeDriver={true}
+      hideModalContentWhileAnimating={false}
       statusBarTranslucent={false}
       backdropOpacity={0.58}
+      // 有效解决弹窗退出的时候闪烁
+      backdropTransitionOutTiming={1}
+      backdropTransitionInTiming={1}
+      renderToHardwareTextureAndroid={true}
       style={{margin: 0, padding: 0, justifyContent: 'flex-end'}}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
